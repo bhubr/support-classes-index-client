@@ -21,7 +21,7 @@ function App() {
   const onSuccess = ({ code }) => getCode(code);
   const onFailure = (response) => console.error(response);
   useEffect(() => {
-    const fetchSessions = async () => {
+    const fetchProfile = async () => {
       try {
         setAuth({ loading: true });
         const { data } = await axios.get('/auth/me');
@@ -31,7 +31,7 @@ function App() {
         setAuth(null);
       }
     }
-    fetchSessions();
+    fetchProfile();
   }, []);
 
   if (!auth) {

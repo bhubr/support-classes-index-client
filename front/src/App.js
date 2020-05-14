@@ -4,7 +4,9 @@ import { Route, Switch } from 'react-router-dom';
 import Login from './components/Login';
 import Navbar from './components/Navbar';
 import SessionCreateForm from './components/SessionCreateForm';
+import SessionEditForm from './components/SessionEditForm';
 import SessionList from './components/SessionList';
+import AuthContext from './AuthContext';
 
 function App() {
   const [error, setError] = useState(null);
@@ -46,11 +48,14 @@ function App() {
 
   return (
     <div className="App">
-      <Navbar auth={auth} setAuth={setAuth} />
-      <Switch>
-        <Route exact path="/" component={SessionList} />
-        <Route path="/create-session" component={SessionCreateForm} />
-      </Switch>
+      <AuthContext.Provider value={auth}>
+        <Navbar auth={auth} setAuth={setAuth} />
+        <Switch>
+          <Route exact path="/" component={SessionList} />
+          <Route path="/create-session" component={SessionCreateForm} />
+          <Route path="/edit-session/:id" component={SessionEditForm} />
+        </Switch>
+      </AuthContext.Provider>
     </div>
   );
 }

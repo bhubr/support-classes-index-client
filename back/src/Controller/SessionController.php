@@ -18,7 +18,6 @@ use App\Model\SessionManager;
 class SessionController extends AbstractController
 {
 
-
     /**
      * Display item listing
      *
@@ -35,7 +34,6 @@ class SessionController extends AbstractController
         return json_encode($sessions);
     }
 
-
     /**
      * Display item informations specified by $id
      *
@@ -45,14 +43,13 @@ class SessionController extends AbstractController
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      */
-    public function show(int $id)
+    public function get(int $id)
     {
         $sessionManager = new sessionManager();
-        $item = $sessionManager->selectOneById($id);
+        $session = $sessionManager->selectOneById($id);
 
-        return $this->twig->render('Item/show.html.twig', ['item' => $item]);
+        return json_encode($session);
     }
-
 
     /**
      * Display item edition page specified by $id
@@ -63,19 +60,24 @@ class SessionController extends AbstractController
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      */
-    public function edit(int $id): string
+    public function update(int $id): string
     {
         $sessionManager = new sessionManager();
-        $item = $sessionManager->selectOneById($id);
+        $session = $sessionManager->selectOneById($id);
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $item['title'] = $_POST['title'];
-            $sessionManager->update($item);
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('HTTP/1.1 405 Method Not Allowed');
+            exit;
         }
 
-        return $this->twig->render('Item/edit.html.twig', ['item' => $item]);
+        $session['title'] = $this->jsonInput['title'];
+        $session['description'] = $this->jsonInput['description'];
+        $session['language'] = $this->jsonInput['language'];
+        $session['created_at'] = $this->jsonInput['createdAt'];
+        $sessionManager->update($session);
+        header('Content-Type: application/json');
+        return json_encode($session);
     }
-
 
     /**
      * Display item creation page
@@ -94,7 +96,7 @@ class SessionController extends AbstractController
                 'title' => $this->jsonInput['title'],
                 'description' => $this->jsonInput['description'],
                 'language' => $this->jsonInput['language'],
-                'created_at' => $this->jsonInput['date'],
+                'created_at' => $this->jsonInput['createdAt'],
             ];
             $id = $sessionManager->insert($session);
             $session['id'] = $id;
@@ -106,7 +108,6 @@ class SessionController extends AbstractController
 
         return $this->twig->render('Item/add.html.twig');
     }
-
 
     /**
      * Handle item deletion

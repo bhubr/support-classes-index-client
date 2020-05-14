@@ -1,8 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+import Markdown from 'react-markdown';
+import AuthContext from '../AuthContext';
 
 function SessionList() {
   const [sessions, setSessions] = useState(null);
+  const { isTrainer } = useContext(AuthContext);
+
   useEffect(() => {
     const fetchSessions = async () => {
       try {
@@ -25,16 +30,21 @@ function SessionList() {
         <div className="column col-12">
           {
             sessions.map(({ id, title, description, language, created_at: createdAt }) => (
-              <div className="card" key={id}>
+              <div className="SessionCard card" key={id}>
                 <div className="card-header">
                   <div className="float-right">
                     <img className="SessionCard__img" src={`/img/${language}-logo.svg`} alt={`${language} logo`} />
                   </div>
-                  <div className="card-title h5">{title}</div>
+                  <div className="card-title h5">
+                    {title}
+                    {isTrainer && (
+                      <Link className="SessionCard__editLink" to={`/edit-session/${id}`}>Edit</Link>
+                    )}
+                  </div>
                   <div className="card-subtitle text-gray">{createdAt}</div>
                 </div>
                 <div className="card-body">
-                  {description}
+                  <Markdown source={description} />
                 </div>
               </div>
             ))

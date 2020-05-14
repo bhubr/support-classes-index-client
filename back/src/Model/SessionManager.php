@@ -27,7 +27,6 @@ class SessionManager extends AbstractManager
         parent::__construct(self::TABLE);
     }
 
-
     /**
      * @param array $session
      * @return int
@@ -45,10 +44,9 @@ class SessionManager extends AbstractManager
         $statement->bindValue('created_at', $session['created_at'], \PDO::PARAM_STR);
 
         if ($statement->execute()) {
-            return (int)$this->pdo->lastInsertId();
+            return (int) $this->pdo->lastInsertId();
         }
     }
-
 
     /**
      * @param int $id
@@ -61,18 +59,22 @@ class SessionManager extends AbstractManager
         $statement->execute();
     }
 
-
     /**
-     * @param array $item
+     * @param array $session
      * @return bool
      */
-    public function update(array $item):bool
+    public function update(array $session): bool
     {
 
         // prepared request
-        $statement = $this->pdo->prepare("UPDATE " . self::TABLE . " SET `title` = :title WHERE id=:id");
-        $statement->bindValue('id', $item['id'], \PDO::PARAM_INT);
-        $statement->bindValue('title', $item['title'], \PDO::PARAM_STR);
+        $statement = $this->pdo->prepare(
+            "UPDATE " . self::TABLE . " SET `title` = :title, `description` = :description, `created_at` = :created_at, `language` = :language WHERE id=:id"
+        );
+        $statement->bindValue('id', $session['id'], \PDO::PARAM_INT);
+        $statement->bindValue('title', $session['title'], \PDO::PARAM_STR);
+        $statement->bindValue('description', $session['description'], \PDO::PARAM_STR);
+        $statement->bindValue('language', $session['language'], \PDO::PARAM_STR);
+        $statement->bindValue('created_at', $session['created_at'], \PDO::PARAM_STR);
 
         return $statement->execute();
     }

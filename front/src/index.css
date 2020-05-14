@@ -1,3 +1,8 @@
 .SessionCard__img {
   width: 32px;
 }
+
+.SessionCard__editLink {
+  font-size: 12px;
+  margin-left: 10px;
+}

@@ -27,8 +27,11 @@ function SessionList() {
             sessions.map(({ id, title, description, language, created_at: createdAt }) => (
               <div className="card" key={id}>
                 <div className="card-header">
+                  <div className="float-right">
+                    <img className="SessionCard__img" src={`/img/${language}-logo.svg`} alt={`${language} logo`} />
+                  </div>
                   <div className="card-title h5">{title}</div>
-                  <div className="card-subtitle text-gray">{language} {createdAt}</div>
+                  <div className="card-subtitle text-gray">{createdAt}</div>
                 </div>
                 <div className="card-body">
                   {description}

@@ -1,0 +1,55 @@
+.Login {
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  /* background-image: url('/img/splash-screen.jpg'); */
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: #eee;
+  overflow: hidden;
+}
+
+.Login__nav {
+  box-sizing: border-box;
+  padding: 8px;
+  text-align: right;
+}
+
+.Login__inner {
+  height: calc(100vh - 56px);
+}
+
+.Login__backdrop {
+  text-align: center;
+  padding: 4em;
+  background: rgba(48, 48, 48, 0.85);
+  backdrop-filter: blur(0.9);
+}
+
+.Login__credits {
+  display: none;
+  box-sizing: border-box;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1.2;
+  display: inline-block;
+}
+
+.Login__credits__inner {
+  margin-left: 0.25rem;
+  display: inline-block;
+}
+
+.Login__credits__item {
+  padding: 0.25rem 1rem;
+}
+
+.WildLogo--splash {
+  max-width: 100px;
+}

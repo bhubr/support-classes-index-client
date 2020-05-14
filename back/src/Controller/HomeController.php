@@ -21,6 +21,9 @@ class HomeController extends AbstractController
      */
     public function index()
     {
-        return $this->twig->render('Home/index.html.twig');
+        $frontPath = realpath(__DIR__ . '/../../../front/build');
+        if (!$frontPath) return '<h1>No build dir in front</h1>';
+        $frontIndex = $frontPath . '/index.html';
+        return file_get_contents($frontIndex);
     }
 }

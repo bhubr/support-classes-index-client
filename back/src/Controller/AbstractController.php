@@ -38,5 +38,9 @@ abstract class AbstractController
             ]
         );
         $this->twig->addExtension(new DebugExtension());
+
+        if(isset($_POST)) {
+            $this->jsonInput = json_decode(file_get_contents('php://input'), true);
+        }
     }
 }

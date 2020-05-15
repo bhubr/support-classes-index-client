@@ -28,6 +28,49 @@ class SessionManager extends AbstractManager
     }
 
     /**
+     * Get all row from database.
+     *
+     * @return array
+     */
+    public function selectAll(): array
+    {
+        $sessions = $this->pdo->query('SELECT * FROM ' . $this->table)->fetchAll();
+        $resources = $this->pdo->query('SELECT * FROM resource')->fetchAll();
+        return array_map(function ($session) use ($resources) {
+            $sessionResources = array_filter($resources, function ($resource) use ($session) {
+                return $resource['session_id'] === $session['id'];
+            });
+            $session['resources'] = array_values($sessionResources);
+            return $session;
+        }, $sessions);
+    }
+
+    /**
+     * Get one row from database by ID.
+     *
+     * @param  int $id
+     *
+     * @return array
+     */
+    public function selectOneById(int $id)
+    {
+        // prepared request
+        $statement = $this->pdo->prepare("SELECT * FROM $this->table WHERE id = :id");
+        $statement->bindValue('id', $id, \PDO::PARAM_INT);
+        $statement->execute();
+
+        $session = $statement->fetch();
+
+        $rscStatement = $this->pdo->prepare("SELECT * FROM resource WHERE session_id = :session_id");
+        $rscStatement->bindValue('session_id', $id, \PDO::PARAM_INT);
+        $rscStatement->execute();
+
+        $resources = $rscStatement->fetchAll();
+        $session['resources'] = $resources;
+        return $session;
+    }
+
+    /**
      * @param array $session
      * @return int
      */

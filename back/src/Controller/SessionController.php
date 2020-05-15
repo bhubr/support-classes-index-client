@@ -9,6 +9,7 @@
 
 namespace App\Controller;
 
+use App\Model\ResourceManager;
 use App\Model\SessionManager;
 
 /**
@@ -60,10 +61,10 @@ class SessionController extends AbstractController
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      */
-    public function update(int $id): string
+    public function update(int $sessionId): string
     {
         $sessionManager = new sessionManager();
-        $session = $sessionManager->selectOneById($id);
+        $session = $sessionManager->selectOneById($sessionId);
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             header('HTTP/1.1 405 Method Not Allowed');
@@ -75,6 +76,23 @@ class SessionController extends AbstractController
         $session['language'] = $this->jsonInput['language'];
         $session['created_at'] = $this->jsonInput['createdAt'];
         $sessionManager->update($session);
+
+        $resourceManager = new ResourceManager();
+
+        $resources = array_map(function ($resourceData) use ($resourceManager, $sessionId) {
+            if (!isset($resourceData['session_id'])) {
+                $resourceData['session_id'] = $sessionId;
+                $resourceId = $resourceManager->insert($resourceData);
+                $resource = $resourceData;
+                $resource['id'] = $resourceId;
+                return $resource;
+            } else {
+                $resourceManager->update($resourceData);
+                return $resourceData;
+            }
+        }, $this->jsonInput['resources']);
+        $session['resources'] = $resources;
+
         header('Content-Type: application/json');
         return json_encode($session);
     }
@@ -91,15 +109,27 @@ class SessionController extends AbstractController
     {
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $sessionManager = new sessionManager();
+            $sessionManager = new SessionManager();
             $session = [
                 'title' => $this->jsonInput['title'],
                 'description' => $this->jsonInput['description'],
                 'language' => $this->jsonInput['language'],
                 'created_at' => $this->jsonInput['createdAt'],
             ];
-            $id = $sessionManager->insert($session);
-            $session['id'] = $id;
+            $sessionId = $sessionManager->insert($session);
+            $session['id'] = $sessionId;
+
+            $resourceManager = new ResourceManager();
+
+            $resources = array_map(function ($resourceData) use ($resourceManager, $sessionId) {
+                $resourceData['session_id'] = $sessionId;
+                $resourceId = $resourceManager->insert($resourceData);
+                $resource = $resourceData;
+                $resource['id'] = $resourceId;
+                return $resource;
+            }, $this->jsonInput['resources']);
+            $session['resources'] = $resources;
+
             $protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1');
 
             header($protocol . ' 201 Created');

@@ -21,8 +21,11 @@ class HomeController extends AbstractController
      */
     public function index()
     {
-        $frontPath = realpath(__DIR__ . '/../../../front/build');
-        if (!$frontPath) return '<h1>No build dir in front</h1>';
+        $frontPath = realpath(__DIR__ . $_ENV['RELATIVE_BUILD_PATH']);
+        if (!$frontPath) {
+            return '<h1>No build dir in front</h1>';
+        }
+
         $frontIndex = $frontPath . '/index.html';
         return file_get_contents($frontIndex);
     }

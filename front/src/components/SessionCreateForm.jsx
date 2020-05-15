@@ -6,7 +6,8 @@ const initialFormData = {
   title: '',
   description: '',
   language: '',
-  createdAt: ''
+  createdAt: '',
+  resources: []
 };
 
 function SessionCreateForm() {

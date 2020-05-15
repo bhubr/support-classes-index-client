@@ -13,8 +13,8 @@ function Navbar({ auth, setAuth }) {
     }
   }
   return (
-    <ul className="nav">
-      <li className="nav-item">
+    <ul className="Navbar nav">
+      <li className="Navbar__home nav-item">
         <Link to="/">Home</Link>
       </li>
       {

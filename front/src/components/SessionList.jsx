@@ -29,7 +29,7 @@ function SessionList() {
       <div className="columns">
         <div className="column col-12">
           {
-            sessions.map(({ id, title, description, language, created_at: createdAt }) => (
+            sessions.map(({ id, title, description, language, created_at: createdAt, resources }) => (
               <div className="SessionCard card" key={id}>
                 <div className="card-header">
                   <div className="float-right">
@@ -45,6 +45,11 @@ function SessionList() {
                 </div>
                 <div className="card-body">
                   <Markdown source={description} />
+                  {
+                    resources.map(({ id, link, title }) => (
+                      <a key={id} className="SessionCard__resource" rel="noopener noreferrer" target="_blank" href={link}>{title}</a>
+                    ))
+                  }
                 </div>
               </div>
             ))

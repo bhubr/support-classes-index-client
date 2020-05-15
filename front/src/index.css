@@ -1,3 +1,7 @@
+.SessionCard {
+  margin-bottom: 1em;
+}
+
 .SessionCard__img {
   width: 32px;
 }
@@ -5,4 +9,16 @@
 .SessionCard__editLink {
   font-size: 12px;
   margin-left: 10px;
+}
+
+.SessionCard__resource {
+  display: block;
+}
+
+.Navbar {
+  flex-direction: row;
+}
+
+.Navbar__home {
+  flex-grow: 1;
 }

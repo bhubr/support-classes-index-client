@@ -1,3 +1,0 @@
-{
-  "scripts" : { "post-install-cmd" : "cd back;composer install;composer update" }
-}

@@ -15,6 +15,9 @@ $method = $routeParts[1] ?? '';
 $vars = array_slice($routeParts, 2);
 
 if (class_exists($controller) && method_exists(new $controller(), $method)) {
+    if (isset($_ENV['CORS_ORIGIN'])) {
+        header("Access-Control-Allow-Origin: " . $_ENV['CORS_ORIGIN']);
+    }
     echo call_user_func_array([new $controller(), $method], $vars);
 } else {
     header("HTTP/1.0 404 Not Found");

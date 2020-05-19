@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import Markdown from 'react-markdown';
 import AuthContext from '../AuthContext';
 
+const { REACT_APP_API_URL } = process.env;
+
 function SessionList() {
   const [sessions, setSessions] = useState(null);
   const { isTrainer } = useContext(AuthContext);
@@ -11,7 +13,7 @@ function SessionList() {
   useEffect(() => {
     const fetchSessions = async () => {
       try {
-        const { data } = await axios.get('/session/index');
+        const { data } = await axios.get(`${REACT_APP_API_URL}/session/index`);
         setSessions(data);
       } catch (err) {
         alert(err.message);

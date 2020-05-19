@@ -8,12 +8,14 @@ import SessionEditForm from './components/SessionEditForm';
 import SessionList from './components/SessionList';
 import AuthContext from './AuthContext';
 
+const { REACT_APP_API_URL } = process.env;
+
 function App() {
   const [error, setError] = useState(null);
   const [auth, setAuth] = useState(null);
   const getCode = async (code) => {
     try {
-      const { data } = await axios.post('/auth/code', { code });
+      const { data } = await axios.post(`${REACT_APP_API_URL}/auth/code`, { code });
       console.log('getCode', data);
       setAuth(data);
     } catch (err) {
